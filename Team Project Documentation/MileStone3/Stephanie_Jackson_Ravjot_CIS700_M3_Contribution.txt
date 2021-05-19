@@ -1,0 +1,7 @@
+Stephanie:
+	   		1. updated notebook to be more structured and include the baseline models under test to compare new metrics added
+	   		2. Added Metric 1
+Jackson:
+			1. Added Metric 2
+Ravjot:
+			1. Added Metric 3

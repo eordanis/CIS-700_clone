@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import os
 import math
 
-
+default_dir = '/content/CIS-700_clone/results/'
 experiment_pref = 'experiment-log-'
 test_file_pref = 'test_file_'
 csv_ext = '.csv'
@@ -17,7 +17,7 @@ def display_best_values(directory=None):
     oracle_list = []
 
     if directory is None:
-        directory = '/content/CIS-700/results/'
+        directory = default_dir
 
     for filename in os.listdir(directory):
         if filename.startswith(experiment_pref) and filename.endswith(csv_ext):
@@ -62,7 +62,7 @@ def display_synth_data(directory=None, rows=None):
     container = ''
     
     if directory is None:
-        directory = '/content/CIS-700/results/'
+        directory = default_dir
     if rows is None:
         rows = 5
     else:
@@ -115,7 +115,7 @@ def display_metrics(directory=None):
     oracle_labels = []
     
     if directory is None:
-        directory = '/content/CIS-700/results/'
+        directory = default_dir
 
     for filename in os.listdir(directory):
         if filename.startswith(experiment_pref) and filename.endswith(csv_ext):
