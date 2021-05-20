@@ -125,11 +125,11 @@ def display_metrics(directory=None):
                 training = fn_split[1]
                 df = pd.read_csv(directory + filename)
                 if training == 'real':
-                    df = df.rename(columns={"EmbeddingSimilarity": "EmbSim_" + model.capitalize(), "nll-test": "Nll-Test_" + model.capitalize()})
+                    df = df.rename(columns={"EmbeddingSimilarity": "EmbSim_" + model.capitalize(), "nll-test": "Nll-Test_" + model.capitalize(), "tei": "TEI_" + model.capitalize()})
                     real_df_list.append(df.set_index('epochs'))
                     real_labels.append(model)
                 elif training == 'oracle':
-                    df = df.rename(columns={"EmbeddingSimilarity": "EmbSim_" + model.capitalize(), "nll-test": "Nll-Test_" + model.capitalize(), "nll-oracle": "Nll-Oracle_" + model.capitalize()})
+                    df = df.rename(columns={"EmbeddingSimilarity": "EmbSim_" + model.capitalize(), "nll-test": "Nll-Test_" + model.capitalize(), "nll-oracle": "Nll-Oracle_" + model.capitalize(), "tei": "TEI_" + model.capitalize()})
                     oracle_df_list.append(df.set_index('epochs'))
                     oracle_labels.append(model)
                 #TODO Add CFG Training Logic Here
@@ -142,9 +142,13 @@ def display_metrics(directory=None):
     df_list.append(real_results[filter_col])
     filter_col = [col for col in real_results if col.startswith('Nll-Test')]
     df_list.append(real_results[filter_col])
+    filter_col = [col for col in real_results if col.startswith('TEI_')]
+    df_list.append(real_results[filter_col])
     filter_col = [col for col in oracle_results if col.startswith('EmbSim_')]
     df_list.append(oracle_results[filter_col])
     filter_col = [col for col in oracle_results if col.startswith('Nll-Test')]
+    df_list.append(oracle_results[filter_col])
+    filter_col = [col for col in oracle_results if col.startswith('TEI_')]
     df_list.append(oracle_results[filter_col])
     filter_col = [col for col in oracle_results if col.startswith('Nll-Oracle')]
     df_list.append(oracle_results[filter_col])
@@ -154,7 +158,7 @@ def display_metrics(directory=None):
     ncol = math.ceil(len(df_list) / nrow)
 
     # make a list of all dataframes
-    df_title_list = ['Real EmbeddingSimilarites', 'Real NLL-Test', 'Oracle EmbeddingSimilarites', 'Oracle NLL-Test', 'Oracle NLL-Oracle']
+    df_title_list = ['Real EmbeddingSimilarites', 'Real NLL-Test', 'Real NLL-TEI', 'Oracle EmbeddingSimilarites', 'Oracle NLL-Test', 'Oracle TEI', 'Oracle NLL-Oracle']
     
     # plot counter
     count = 0
@@ -170,6 +174,8 @@ def display_metrics(directory=None):
                     df.columns = df.columns.str.replace(r'^EmbSim_', '')
                 if df.columns.any('Nll-Test_'):
                     df.columns = df.columns.str.replace(r'^Nll-Test_', '')
+                if df.columns.any('TEI_'):
+                    df.columns = df.columns.str.replace(r'^TEI_', '')
                 if df.columns.any('Nll-Oracle_'):
                     df.columns = df.columns.str.replace(r'^Nll-Oracle_', '')
                 df.plot(ax=axes[r, c], y=df.columns, kind='line',
