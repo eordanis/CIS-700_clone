@@ -158,7 +158,7 @@ def display_metrics(directory=None):
     ncol = math.ceil(len(df_list) / nrow)
 
     # make a list of all dataframes
-    df_title_list = ['Real EmbeddingSimilarites', 'Real NLL-Test', 'Real NLL-TEI', 'Oracle EmbeddingSimilarites', 'Oracle NLL-Test', 'Oracle TEI', 'Oracle NLL-Oracle']
+    df_title_list = ['Real EmbeddingSimilarites', 'Real NLL-Test', 'Real TEI', 'Oracle EmbeddingSimilarites', 'Oracle NLL-Test', 'Oracle TEI', 'Oracle NLL-Oracle']
     
     # plot counter
     count = 0
