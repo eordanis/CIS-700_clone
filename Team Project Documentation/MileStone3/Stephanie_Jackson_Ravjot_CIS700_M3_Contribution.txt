@@ -1,6 +1,8 @@
 Stephanie:
-	   		1. updated notebook to be more structured and include the baseline models under test to compare new metrics added
-	   		2. Added Metric 1
+	   		1. Updated notebook to be more structured and include the baseline models under test to compare new metrics added
+	   		2. Added first metric: 
+				Time Elapse Interval (TEI) : Measures time elapse for the model per interval (epoch) run. Used to measure average time efficiency to run model for each training during epochs. 
+							     Helps gauge run time during various model training components (ie pre training and adversarial training)
 Jackson:
 			1. Added Metric 2
 Ravjot:

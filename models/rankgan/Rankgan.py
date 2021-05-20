@@ -8,6 +8,7 @@ from models.rankgan.RankganReward import Reward
 from utils.metrics.Bleu import Bleu
 from utils.metrics.EmbSim import EmbSim
 from utils.metrics.Nll import Nll
+from utils.metrics.TEI import TEI
 from utils.oracle.OracleLstm import OracleLstm
 from utils.utils import *
 
@@ -65,7 +66,10 @@ class Rankgan(Gan):
         docsim = DocEmbSim(oracle_file=self.oracle_file, generator_file=self.generator_file, num_vocabulary=self.vocab_size)
         self.add_metric(docsim)
         
-        print("Metrics Applied: " + nll.get_name() + ", " + inll.get_name() + ", " + docsim.get_name())
+        tei = TEI()
+        self.add_metric(tei)
+
+        print("Metrics Applied: " + nll.get_name() + ", " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name())
         
         
 
@@ -185,7 +189,11 @@ class Rankgan(Gan):
         from utils.metrics.Cfg import Cfg
         cfg = Cfg(test_file=self.test_file, cfg_grammar=grammar)
         self.add_metric(cfg)
-        print("Metrics Applied: " + cfg.get_name())
+        
+        tei = TEI()
+        self.add_metric(tei)
+        
+        print("Metrics Applied: " + cfg.get_name() + ", " + tei.get_name())
         
 
     def train_cfg(self):
@@ -297,7 +305,10 @@ class Rankgan(Gan):
         inll.set_name('nll-test')
         self.add_metric(inll)
         
-        print("Metrics Applied: " + inll.get_name() + ", " + docsim.get_name())
+        tei = TEI()
+        self.add_metric(tei)
+        
+        print("Metrics Applied: " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name())
         
         
 

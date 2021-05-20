@@ -6,6 +6,7 @@ from models.mle.MleGenerator import Generator
 from utils.metrics.Bleu import Bleu
 from utils.metrics.EmbSim import EmbSim
 from utils.metrics.Nll import Nll
+from utils.metrics.TEI import TEI
 from utils.oracle.OracleLstm import OracleLstm
 from utils.utils import *
 
@@ -57,7 +58,10 @@ class Mle(Gan):
         docsim = DocEmbSim(oracle_file=self.oracle_file, generator_file=self.generator_file, num_vocabulary=self.vocab_size)
         self.add_metric(docsim)
         
-        print("Metrics Applied: " + nll.get_name() + ", " + inll.get_name() + ", " + docsim.get_name())
+        tei = TEI()
+        self.add_metric(tei)
+
+        print("Metrics Applied: " + nll.get_name() + ", " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name())
         
         
 
