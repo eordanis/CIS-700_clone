@@ -19,7 +19,7 @@ def display_best_values(directory=None):
     if directory is None:
         directory = default_dir
 
-    for filename in os.listdir(directory):
+    for filename in sorted(os.listdir(directory)):
         if filename.startswith(experiment_pref) and filename.endswith(csv_ext):
             fn_split = filename.split(experiment_pref)[1].split(csv_ext)[0].split('-')
             if(len(fn_split) == 2):
@@ -70,7 +70,7 @@ def display_synth_data(directory=None, rows=None):
         
     real_synth_image_path = directory + "real_synth_data.png"
     
-    for filename in os.listdir(directory):
+    for filename in sorted(os.listdir(directory)):
         if filename.startswith(test_file_pref) and filename.endswith(txt_ext):
             fn_split = filename.split(test_file_pref)[1].split(txt_ext)[0].split('_')
             if len(fn_split) == 2:
@@ -117,7 +117,7 @@ def display_metrics(directory=None):
     if directory is None:
         directory = default_dir
 
-    for filename in os.listdir(directory):
+    for filename in sorted(os.listdir(directory)):
         if filename.startswith(experiment_pref) and filename.endswith(csv_ext):
             fn_split = filename.split(experiment_pref)[1].split(csv_ext)[0].split('-')
             if(len(fn_split) == 2):
@@ -137,8 +137,9 @@ def display_metrics(directory=None):
     real_results = pd.concat(real_df_list)
     oracle_results = pd.concat(oracle_df_list)
 
+    type_order
     # filter results to get separate lists for each metric type under each training
-    filter_col = [col for col in real_results if col.startswith('EmbSim_') ]
+    filter_col = [col for col in real_results if col.startswith('EmbSim_')]
     df_list.append(real_results[filter_col])
     filter_col = [col for col in real_results if col.startswith('Nll-Test')]
     df_list.append(real_results[filter_col])
@@ -154,8 +155,8 @@ def display_metrics(directory=None):
     df_list.append(oracle_results[filter_col])
 
     # define number of rows and columns for subplots
-    nrow = 3
-    ncol = math.ceil(len(df_list) / nrow)
+    ncol = 2
+    nrow = math.ceil(len(df_list) / ncol)
 
     # make a list of all dataframes
     df_title_list = ['Real EmbeddingSimilarites', 'Real NLL-Test', 'Real TEI', 'Oracle EmbeddingSimilarites', 'Oracle NLL-Test', 'Oracle TEI', 'Oracle NLL-Oracle']
