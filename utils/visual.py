@@ -137,7 +137,6 @@ def display_metrics(directory=None):
     real_results = pd.concat(real_df_list)
     oracle_results = pd.concat(oracle_df_list)
 
-    type_order
     # filter results to get separate lists for each metric type under each training
     filter_col = [col for col in real_results if col.startswith('EmbSim_')]
     df_list.append(real_results[filter_col])
