@@ -166,10 +166,12 @@ def display_metrics(directory=None):
     #build plot
     fig, axes = plt.subplots(nrow, ncol)
     plt.subplots_adjust(wspace=0.2, hspace=0.5)
+    plt.legend(loc = "upper left")
     for r in range(nrow):
         for c in range(ncol):
             if count < len(df_list):
                 df = df_list[count]
+                '''
                 if df.columns.any('EmbSim_'):
                     df.columns = df.columns.str.replace(r'^EmbSim_', '')
                 if df.columns.any('Nll-Test_'):
@@ -178,6 +180,7 @@ def display_metrics(directory=None):
                     df.columns = df.columns.str.replace(r'^TEI_', '')
                 if df.columns.any('Nll-Oracle_'):
                     df.columns = df.columns.str.replace(r'^Nll-Oracle_', '')
+                '''
                 df.plot(ax=axes[r, c], y=df.columns, kind='line',
                             title=df_title_list[count], figsize=(20, 10))
                 count += 1
