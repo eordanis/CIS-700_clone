@@ -145,7 +145,7 @@ class Discriminator():
         self.Wo = tf.compat.v1.Variable(self.init_matrix([self.hidden_dim, self.num_classes]))
         self.bo = tf.compat.v1.Variable(self.init_matrix([self.num_classes]))
         params.extend([self.Wo, self.bo])
-        self.predictions = tf.compat.v1.argmax(self.scores, 1, name="predictions")
+        self.predictions = tf.compat.v1.argmax(self.score, 1, name="predictions")
 
         def unit(hidden_memory_tuple):
             hidden_state, c_prev = tf.compat.v1.unstack(hidden_memory_tuple)
