@@ -313,7 +313,7 @@ class Cgan(Gan):
         self.acc = ACC()
         self.add_metric(self.acc)
         
-        print("Metrics Applied: " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name() ", " + self.acc.get_name())
+        print("Metrics Applied: " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name() + ", " + self.acc.get_name())
         
         
 
