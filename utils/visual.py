@@ -32,7 +32,7 @@ def display_best_values(directory=None):
                     if col == 'epochs' or col.startswith('Unnamed'):
                         continue
 
-                    if col == 'EmbeddingSimilarity':
+                    if col == 'EmbeddingSimilarity' or col == 'acc':
                         temp = df.iloc[df[col].argmax()]
                         best_val = str(round(temp[col], 4))
                     elif col != 'epochs':

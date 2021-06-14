@@ -10,6 +10,7 @@ from utils.metrics.Cfg import Cfg
 from utils.metrics.EmbSim import EmbSim
 from utils.metrics.Nll import Nll
 from utils.metrics.TEI import TEI
+from utils.metrics.clas_acc import ACC
 from utils.oracle.OracleCfg import OracleCfg
 from utils.oracle.OracleLstm import OracleLstm
 from utils.text_process import *
@@ -33,22 +34,25 @@ class Infogan(Gan):
         self.start_token = 0
 
 
-    def init_metric(self):
-        nll = Nll(data_loader=self.oracle_data_loader, rnn=self.oracle, sess=self.sess)
-        self.add_metric(nll)
+    def init_metric(self):     
+      nll = Nll(data_loader=self.oracle_data_loader, rnn=self.oracle, sess=self.sess)
+      self.add_metric(nll)
 
-        inll = Nll(data_loader=self.gen_data_loader, rnn=self.generator, sess=self.sess)
-        inll.set_name('nll-test')
-        self.add_metric(inll)
+      inll = Nll(data_loader=self.gen_data_loader, rnn=self.generator, sess=self.sess)
+      inll.set_name('nll-test')
+      self.add_metric(inll)
 
-        from utils.metrics.DocEmbSim import DocEmbSim
-        docsim = DocEmbSim(oracle_file=self.oracle_file, generator_file=self.generator_file, num_vocabulary=self.vocab_size)
-        self.add_metric(docsim)
-        
-        tei = TEI()
-        self.add_metric(tei)
+      from utils.metrics.DocEmbSim import DocEmbSim
+      docsim = DocEmbSim(oracle_file=self.oracle_file, generator_file=self.generator_file, num_vocabulary=self.vocab_size)
+      self.add_metric(docsim)
+    
+      tei = TEI()
+      self.add_metric(tei)
 
-        print("Metrics Applied: " + nll.get_name() + ", " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name())
+      self.acc = ACC()
+      self.add_metric(self.acc)
+
+      print("Metrics Applied: " + nll.get_name() + ", " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name() + ", " + self.acc.get_name())
         
         
 
@@ -64,6 +68,9 @@ class Infogan(Gan):
                 self.discriminator.input_y: y_batch,
             }
             loss,_ = self.sess.run([self.discriminator.d_loss, self.discriminator.train_op], feed)
+            input_y,_ = self.sess.run([self.discriminator.input_y, self.discriminator.train_op], feed)
+            predictions,_ = self.sess.run([self.discriminator.predictions, self.discriminator.train_op], feed)
+            self.acc.reset(predictions, input_y)
             #print(loss)
 
     def evaluate(self):
@@ -94,12 +101,12 @@ class Infogan(Gan):
 
         generator = Generator(num_vocabulary=self.vocab_size, batch_size=self.batch_size, emb_dim=self.emb_dim,
                               hidden_dim=self.hidden_dim, sequence_length=self.sequence_length,
-                              start_token=self.start_token)
+                            start_token=self.start_token)
         self.set_generator(generator)
 
         discriminator = Discriminator(sequence_length=self.sequence_length, num_classes=2, vocab_size=self.vocab_size,
                                       emd_dim=self.emb_dim, filter_sizes=self.filter_size, num_filters=self.num_filters,
-                                      l2_reg_lambda=self.l2_reg_lambda)
+                                      sess=self.sess, l2_reg_lambda=self.l2_reg_lambda)
         self.set_discriminator(discriminator)
 
         gen_dataloader = DataLoader(batch_size=self.batch_size, seq_length=self.sequence_length)
@@ -185,8 +192,12 @@ class Infogan(Gan):
         
         tei = TEI()
         self.add_metric(tei)
+
+        acc = ACC()
+        acc.reset(acc, self.dis_data_loader)
+        self.add_metric(acc)
         
-        print("Metrics Applied: " + cfg.get_name() + ", " + tei.get_name())
+        print("Metrics Applied: " + cfg.get_name() + ", " + tei.get_name()  + ", " + tei.get_name())
         
 
     def train_cfg(self):
@@ -297,8 +308,12 @@ class Infogan(Gan):
         
         tei = TEI()
         self.add_metric(tei)
+
+        acc = ACC()
+        acc.reset(acc, clas_data.loader)
+        self.add_metric(acc)
         
-        print("Metrics Applied: " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name())
+        print("Metrics Applied: " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name()  + ", " + acc.get_name())
 
 
     def train_real(self, data_loc=None):
