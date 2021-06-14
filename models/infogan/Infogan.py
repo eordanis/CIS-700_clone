@@ -106,7 +106,7 @@ class Infogan(Gan):
 
         discriminator = Discriminator(sequence_length=self.sequence_length, num_classes=2, vocab_size=self.vocab_size,
                                       emd_dim=self.emb_dim, filter_sizes=self.filter_size, num_filters=self.num_filters,
-                                      sess=self.sess, l2_reg_lambda=self.l2_reg_lambda)
+                                      l2_reg_lambda=self.l2_reg_lambda)
         self.set_discriminator(discriminator)
 
         gen_dataloader = DataLoader(batch_size=self.batch_size, seq_length=self.sequence_length)
@@ -193,11 +193,10 @@ class Infogan(Gan):
         tei = TEI()
         self.add_metric(tei)
 
-        acc = ACC()
-        acc.reset(acc, self.dis_data_loader)
-        self.add_metric(acc)
+        self.acc = ACC()
+        self.add_metric(self.acc)
         
-        print("Metrics Applied: " + cfg.get_name() + ", " + tei.get_name()  + ", " + tei.get_name())
+        print("Metrics Applied: " + cfg.get_name() + ", " + tei.get_name()  + ", " + self.acc.get_name())
         
 
     def train_cfg(self):
@@ -309,11 +308,10 @@ class Infogan(Gan):
         tei = TEI()
         self.add_metric(tei)
 
-        acc = ACC()
-        acc.reset(acc, clas_data.loader)
-        self.add_metric(acc)
+        self.acc = ACC()
+        self.add_metric(self.acc)
         
-        print("Metrics Applied: " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name()  + ", " + acc.get_name())
+        print("Metrics Applied: " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name()  + ", " + self.acc.get_name())
 
 
     def train_real(self, data_loc=None):

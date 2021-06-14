@@ -48,7 +48,10 @@ class Seqgan(Gan):
         tei = TEI()
         self.add_metric(tei)
 
-        print("Metrics Applied: " + nll.get_name() + ", " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name())
+        self.acc = ACC()
+        self.add_metric(self.acc)
+
+        print("Metrics Applied: " + nll.get_name() + ", " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name() + ", " + self.acc.get_name())
 
     def train_discriminator(self):
         generate_samples(self.sess, self.generator, self.batch_size, self.generate_num, self.generator_file)
@@ -61,6 +64,9 @@ class Seqgan(Gan):
                 self.discriminator.input_y: y_batch,
             }
             loss,_ = self.sess.run([self.discriminator.d_loss, self.discriminator.train_op], feed)
+            input_y,_ = self.sess.run([self.discriminator.input_y, self.discriminator.train_op], feed)
+            predictions,_ = self.sess.run([self.discriminator.predictions, self.discriminator.train_op], feed)
+            self.acc.reset(predictions, input_y)
             #print(loss)
 
     def evaluate(self):
@@ -182,8 +188,11 @@ class Seqgan(Gan):
         
         tei = TEI()
         self.add_metric(tei)
+
+        self.acc = ACC()
+        self.add_metric(self.acc)
         
-        print("Metrics Applied: " + cfg.get_name() + ", " + tei.get_name())
+        print("Metrics Applied: " + cfg.get_name() + ", " + tei.get_name() + ", " + self.acc.get_name())
 
 
     def train_cfg(self):
@@ -294,8 +303,11 @@ class Seqgan(Gan):
         
         tei = TEI()
         self.add_metric(tei)
+
+        self.acc = ACC()
+        self.add_metric(self.acc)
         
-        print("Metrics Applied: " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name())
+        print("Metrics Applied: " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name() + ", " + self.acc.get_name())
 
 
     def train_real(self, data_loc=None):

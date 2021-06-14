@@ -93,7 +93,10 @@ class TextganMmd(Gan):
         tei = TEI()
         self.add_metric(tei)
 
-        print("Metrics Applied: " + nll.get_name() + ", " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name())
+        self.acc = ACC()
+        self.add_metric(self.acc)
+
+        print("Metrics Applied: " + nll.get_name() + ", " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name() + ", " + self.acc.get_name())
         
         
 
@@ -109,6 +112,9 @@ class TextganMmd(Gan):
                 self.discriminator.input_y_lable: [[0, 1] for _ in y_batch],
             }
             _ = self.sess.run(self.discriminator.train_op, feed)
+            input_y,_ = self.sess.run([self.discriminator.input_y, self.discriminator.train_op], feed)
+            predictions,_ = self.sess.run([self.discriminator.predictions, self.discriminator.train_op], feed)
+            self.acc.reset(predictions, input_y)
 
     def train_generator(self):
         z_h0 = np.random.uniform(low=-.01, high=.01, size=[self.batch_size, self.emb_dim])
@@ -215,8 +221,11 @@ class TextganMmd(Gan):
         
         tei = TEI()
         self.add_metric(tei)
+
+        self.acc = ACC()
+        self.add_metric(self.acc)
         
-        print("Metrics Applied: " + cfg.get_name() + ", " + tei.get_name())
+        print("Metrics Applied: " + cfg.get_name() + ", " + tei.get_name() + ", " + self.acc.get_name())
         
 
     def train_cfg(self):
@@ -327,8 +336,11 @@ class TextganMmd(Gan):
         
         tei = TEI()
         self.add_metric(tei)
+
+        self.acc = ACC()
+        self.add_metric(self.acc)
         
-        print("Metrics Applied: " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name())
+        print("Metrics Applied: " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name() + ", " + self.acc.get_name())
         
         
 

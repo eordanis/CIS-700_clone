@@ -55,7 +55,7 @@ class Discriminator(object):
 
     def __init__(
             self, sequence_length, num_classes, vocab_size,
-            emd_dim, filter_sizes, num_filters, sess, l2_reg_lambda=0.0, dropout_keep_prob = 1):
+            emd_dim, filter_sizes, num_filters, l2_reg_lambda=0.0, dropout_keep_prob = 1):
         # Placeholders for input, output and dropout
         self.input_x = tf.compat.v1.placeholder(tf.compat.v1.int32, [None, sequence_length], name="input_x")
         self.input_y = tf.compat.v1.placeholder(tf.compat.v1.float32, [None, num_classes], name="input_y")

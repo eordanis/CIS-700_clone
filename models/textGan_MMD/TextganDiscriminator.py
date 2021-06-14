@@ -66,7 +66,7 @@ class Discriminator(object):
             input_label = tf.compat.v1.concat([self.input_x_lable, self.input_y_lable], axis=0)
 
             input_x = tf.compat.v1.nn.embedding_lookup(self.embbeding_mat, input_xy)  # batch_size x seq_length x g_emb_dim
-            scores, ypred_for_auc, predictions = self.predict(input_x=input_x)
+            scores, ypred_for_auc, self.predictions = self.predict(input_x=input_x)
 
             def compute_pairwise_distances(x, y):
                 """Computes the squared pairwise Euclidean distances between x and y.
@@ -207,6 +207,6 @@ class Discriminator(object):
             l2_loss += tf.compat.v1.nn.l2_loss(self.bo)
             scores = tf.compat.v1.nn.xw_plus_b(h_drop, self.Wo, self.bo, name="scores")
             ypred_for_auc = tf.compat.v1.nn.softmax(scores)
-            predictions = tf.compat.v1.argmax(scores, 1, name="predictions")
+            self.predictions = tf.compat.v1.argmax(scores, 1, name="predictions")
 
-        return scores, ypred_for_auc, predictions
+        return scores, ypred_for_auc, self.predictions
