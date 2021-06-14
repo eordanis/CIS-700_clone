@@ -10,6 +10,7 @@ from utils.metrics.Cfg import Cfg
 from utils.metrics.EmbSim import EmbSim
 from utils.metrics.Nll import Nll
 from utils.metrics.TEI import TEI
+from utils.metrics.clas_acc import ACC
 from utils.oracle.OracleCfg import OracleCfg
 from utils.oracle.OracleLstm import OracleLstm
 from utils.text_process import *

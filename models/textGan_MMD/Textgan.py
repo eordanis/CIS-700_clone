@@ -8,6 +8,7 @@ from utils.metrics.Bleu import Bleu
 from utils.metrics.EmbSim import EmbSim
 from utils.metrics.Nll import Nll
 from utils.metrics.TEI import TEI
+from utils.metrics.clas_acc import ACC
 from utils.oracle.OracleLstm import OracleLstm
 from utils.utils import *
 
