@@ -206,7 +206,7 @@ class Cgan(Gan):
         self.acc = ACC()
         self.add_metric(self.acc)
         
-        print("Metrics Applied: " + cfg.get_name() + ", " + tei.get_name() ", " + self.acc.get_name())
+        print("Metrics Applied: " + cfg.get_name() + ", " + tei.get_name() + ", " + self.acc.get_name())
         
 
     def train_cfg(self):
