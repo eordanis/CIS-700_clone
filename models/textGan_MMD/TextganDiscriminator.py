@@ -68,6 +68,8 @@ class Discriminator(object):
             input_x = tf.compat.v1.nn.embedding_lookup(self.embbeding_mat, input_xy)  # batch_size x seq_length x g_emb_dim
             scores, ypred_for_auc, self.predictions = self.predict(input_x=input_x)
 
+            self.predictions2 = self.predictions
+
             def compute_pairwise_distances(x, y):
                 """Computes the squared pairwise Euclidean distances between x and y.
                 Args:

@@ -113,8 +113,8 @@ class TextganMmd(Gan):
                 self.discriminator.input_y_lable: [[0, 1] for _ in y_batch],
             }
             _ = self.sess.run(self.discriminator.train_op, feed)
-            input_y,_ = self.sess.run([self.discriminator.input_y, self.discriminator.train_op], feed)
-            predictions,_ = self.sess.run([self.discriminator.predictions, self.discriminator.train_op], feed)
+            input_y,_ = self.sess.run([self.discriminator.input_label, self.discriminator.train_op], feed)
+            predictions,_ = self.sess.run([self.discriminator.predictions2, self.discriminator.train_op], feed)
             self.acc.reset(predictions, input_y)
 
     def train_generator(self):
