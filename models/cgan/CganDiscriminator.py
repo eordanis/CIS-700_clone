@@ -46,6 +46,8 @@ class Discriminator():
         score = self.predict(input_x=self.input_x)
         self.score = score
 
+        self.predictions = tf.compat.v1.argmax(self.score, 1, name="predictions")
+
         with tf.compat.v1.name_scope('Dloss'):
             pred_loss = tf.compat.v1.nn.softmax_cross_entropy_with_logits(logits=score, labels=self.input_y)
             # todo reg loss
@@ -145,8 +147,6 @@ class Discriminator():
         self.Wo = tf.compat.v1.Variable(self.init_matrix([self.hidden_dim, self.num_classes]))
         self.bo = tf.compat.v1.Variable(self.init_matrix([self.num_classes]))
         params.extend([self.Wo, self.bo])
-        if(hasattr(self, 'score')):
-                self.predictions = tf.compat.v1.argmax(self.score, 1, name="predictions")
 
         def unit(hidden_memory_tuple):
             hidden_state, c_prev = tf.compat.v1.unstack(hidden_memory_tuple)

@@ -38,9 +38,9 @@ class ACC(Metrics):
             for x in self.y:
                 yVals.append(x[0])
             acc =  accuracy_score(self.predictions, yVals)
-            if acc == 'None':
-                return 0
-            else:
-                return acc
+            return acc
+        else:
+            return 0
+
 
         
