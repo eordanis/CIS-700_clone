@@ -63,7 +63,7 @@ class Discriminator(object):
                 self.bzh = tf.compat.v1.Variable(tf.compat.v1.constant(0.0, shape=[1]), name="bz")
 
             input_xy = tf.compat.v1.concat([self.input_x, self.input_y], axis=0)
-            input_label = tf.compat.v1.concat([self.input_x_lable, self.input_y_lable], axis=0)
+            self.input_label = tf.compat.v1.concat([self.input_x_lable, self.input_y_lable], axis=0)
 
             input_x = tf.compat.v1.nn.embedding_lookup(self.embbeding_mat, input_xy)  # batch_size x seq_length x g_emb_dim
             scores, ypred_for_auc, self.predictions = self.predict(input_x=input_x)
@@ -138,7 +138,7 @@ class Discriminator(object):
             with tf.compat.v1.name_scope("loss"):
                 batch_num = tf.compat.v1.shape(scores)[0]
                 pos_score = tf.compat.v1.slice(scores, begin=[0, 0], size=[batch_num, 1])
-                pos_label = tf.compat.v1.slice(input_label, begin=[0, 0], size=[batch_num, 1])
+                pos_label = tf.compat.v1.slice(self.input_label, begin=[0, 0], size=[batch_num, 1])
                 gan_loss = tf.compat.v1.log(tf.compat.v1.norm(pos_score - pos_label, ord=1))
                 x_feature = self.feature(input_x=self.input_x, name='x')
                 y_feature = self.feature(input_x=self.input_y, name='y')
