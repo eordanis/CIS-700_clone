@@ -7,6 +7,6 @@ Stephanie:
 							     Helps gauge run time during various model training components (ie pre training and adversarial training)
 			5. Assisting team with implementation of their responsible metrics
 Jackson:
-			1. Added Metric 2
+			1. Added Metric accuracy
 Ravjot:
-			1. Added Metric 3
+			1. Added Metric perplexity
