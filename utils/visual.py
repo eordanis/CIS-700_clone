@@ -125,11 +125,11 @@ def display_metrics(directory=None):
                 training = fn_split[1]
                 df = pd.read_csv(directory + filename)
                 if training == 'real':
-                    df = df.rename(columns={"EmbeddingSimilarity": "EmbSim_" + model.capitalize(), "nll-test": "Nll-Test_" + model.capitalize(), "tei": "TEI_" + model.capitalize(), "acc": "ACC_" + model.capitalize(), "pll": "PLL_" + model.capitalize()})
+                    df = df.rename(columns={"EmbeddingSimilarity": "EmbSim_" + model.capitalize(), "nll-test": "Nll-Test_" + model.capitalize(), "tei": "TEI_" + model.capitalize(), "acc": "ACC_" + model.capitalize(), "ppl": "PPL_" + model.capitalize()})
                     real_df_list.append(df.set_index('epochs'))
                     real_labels.append(model)
                 elif training == 'oracle':
-                    df = df.rename(columns={"EmbeddingSimilarity": "EmbSim_" + model.capitalize(), "nll-test": "Nll-Test_" + model.capitalize(), "nll-oracle": "Nll-Oracle_" + model.capitalize(), "tei": "TEI_" + model.capitalize(), "acc": "ACC_" + model.capitalize(), "pll": "PLL_" + model.capitalize()})
+                    df = df.rename(columns={"EmbeddingSimilarity": "EmbSim_" + model.capitalize(), "nll-test": "Nll-Test_" + model.capitalize(), "nll-oracle": "Nll-Oracle_" + model.capitalize(), "tei": "TEI_" + model.capitalize(), "acc": "ACC_" + model.capitalize(), "ppl": "PPL_" + model.capitalize()})
                     oracle_df_list.append(df.set_index('epochs'))
                     oracle_labels.append(model)
                 #TODO Add CFG Training Logic Here
@@ -146,7 +146,7 @@ def display_metrics(directory=None):
     df_list.append(real_results[filter_col])
     filter_col = [col for col in real_results if col.startswith('ACC_')]
     df_list.append(real_results[filter_col])
-    filter_col = [col for col in real_results if col.startswith('PLL_')]
+    filter_col = [col for col in real_results if col.startswith('PPL_')]
     df_list.append(real_results[filter_col])
     filter_col = [col for col in oracle_results if col.startswith('EmbSim_')]
     df_list.append(oracle_results[filter_col])
@@ -156,7 +156,7 @@ def display_metrics(directory=None):
     df_list.append(oracle_results[filter_col])
     filter_col = [col for col in oracle_results if col.startswith('ACC_')]
     df_list.append(oracle_results[filter_col])
-    filter_col = [col for col in oracle_results if col.startswith('PLL_')]
+    filter_col = [col for col in oracle_results if col.startswith('PPL_')]
     df_list.append(oracle_results[filter_col])
     filter_col = [col for col in oracle_results if col.startswith('Nll-Oracle')]
     df_list.append(oracle_results[filter_col])
@@ -166,7 +166,7 @@ def display_metrics(directory=None):
     nrow = math.ceil(len(df_list) / ncol)
 
     # make a list of all dataframes
-    df_title_list = ['Real EmbeddingSimilarites', 'Real NLL-Test', 'Real TEI', 'Real ACC', 'Real PLL', 'Oracle EmbeddingSimilarites', 'Oracle NLL-Test', 'Oracle TEI', 'Oracle ACC', 'Oracle PLL', 'Oracle NLL-Oracle']
+    df_title_list = ['Real EmbeddingSimilarites', 'Real NLL-Test', 'Real TEI', 'Real ACC', 'Real PPL', 'Oracle EmbeddingSimilarites', 'Oracle NLL-Test', 'Oracle TEI', 'Oracle ACC', 'Oracle PPL', 'Oracle NLL-Oracle']
     
     # plot counter
     count = 0
@@ -186,8 +186,8 @@ def display_metrics(directory=None):
                     df.columns = df.columns.str.replace(r'^TEI_', '')
                 if df.columns.any('ACC_'):
                     df.columns = df.columns.str.replace(r'^ACC_', '')
-                if df.columns.any('PLL_'):
-                    df.columns = df.columns.str.replace(r'^PLL_', '')
+                if df.columns.any('PPL_'):
+                    df.columns = df.columns.str.replace(r'^PPL_', '')
                 if df.columns.any('Nll-Oracle_'):
                     df.columns = df.columns.str.replace(r'^Nll-Oracle_', '')
                 print(df.columns)
