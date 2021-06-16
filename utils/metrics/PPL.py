@@ -26,7 +26,7 @@ class PPL(Metrics):
         print("train_data = ", train_data)
         print("test_data = ", test_data)
 
-        self.name = 'PPL'
+        self.name = 'ppl'
         self.n_gram = n_gram
         self.if_use = if_use
 
