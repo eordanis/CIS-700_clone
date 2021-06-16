@@ -49,10 +49,11 @@ class Seqgan(Gan):
         
         tei = TEI()
         self.add_metric(tei)
+
+        self.acc = ACC()
+        self.add_metric(self.acc)
         
         ppl = PPL(self.generator_file, self.oracle_file)
-        # eval_samples = [self.generator.sample(self.sequence_length * self.batch_size, self.batch_size, label_i=i)
-        #                 for i in range(2)]
         eval_samples=self.generator.sample(self.sequence_length, self.batch_size, label_i=1)
         tokens = get_tokenlized(self.generator_file)
         word_set = get_word_list(tokens)
@@ -60,9 +61,6 @@ class Seqgan(Gan):
         gen_tokens = tensor_to_tokens(eval_samples, idx2word_dict)
         ppl.reset(gen_tokens)
         self.add_metric(ppl)
-
-        self.acc = ACC()
-        self.add_metric(self.acc)
 
         print("Metrics Applied: " + nll.get_name() + ", " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name() + ", " + self.acc.get_name() + ", " + ppl.get_name())
 

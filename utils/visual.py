@@ -129,7 +129,7 @@ def display_metrics(directory=None):
                     real_df_list.append(df.set_index('epochs'))
                     real_labels.append(model)
                 elif training == 'oracle':
-                    df = df.rename(columns={"EmbeddingSimilarity": "EmbSim_" + model.capitalize(), "nll-test": "Nll-Test_" + model.capitalize(), "nll-oracle": "Nll-Oracle_" + model.capitalize(), "tei": "TEI_" + model.capitalize(), "acc": "ACC_" + model.capitalize()})
+                    df = df.rename(columns={"EmbeddingSimilarity": "EmbSim_" + model.capitalize(), "nll-test": "Nll-Test_" + model.capitalize(), "nll-oracle": "Nll-Oracle_" + model.capitalize(), "tei": "TEI_" + model.capitalize(), "acc": "ACC_" + model.capitalize(), "pll": "PLL_" + model.capitalize()})
                     oracle_df_list.append(df.set_index('epochs'))
                     oracle_labels.append(model)
                 #TODO Add CFG Training Logic Here
