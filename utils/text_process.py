@@ -1,5 +1,6 @@
 # coding=utf-8
 import nltk
+import utils.config as cfg
 
 
 def chinese_process(filein, fileout):
@@ -88,3 +89,26 @@ def text_precess(train_text_loc, test_text_loc=None):
         outfile.write(text_to_code(test_tokens, word_index_dict, sequence_len))
 
     return sequence_len, len(word_index_dict) + 1
+
+def write_tokens(filename, tokens):
+    """Write word tokens to a local file (For Real data)"""
+    with open(filename, 'w+') as fout:
+        for sent in tokens:
+            fout.write(' '.join(sent))
+            fout.write('\n')
+
+def tensor_to_tokens(tensor, dictionary):
+    """transform Tensor to word tokens"""
+    tokens = []
+    # print("tensor= ", tensor)
+    for sent in tensor:
+        # print("sent = ",sent)
+        sent_token = []
+        for word in sent.tolist():
+            if word == cfg.padding_idx:
+                break
+            # print("word = ", word)
+            # print("dictioanry = ", dictionary)
+            sent_token.append(dictionary[str(int(word/10))])
+        tokens.append(sent_token)
+    return tokens

@@ -11,6 +11,7 @@ from utils.metrics.EmbSim import EmbSim
 from utils.metrics.Nll import Nll
 from utils.metrics.TEI import TEI
 from utils.metrics.clas_acc import ACC
+from utils.metrics.PPL import PPL
 from utils.oracle.OracleCfg import OracleCfg
 from utils.oracle.OracleLstm import OracleLstm
 from utils.text_process import *
@@ -51,8 +52,19 @@ class Dcgan(Gan):
 
         self.acc = ACC()
         self.add_metric(self.acc)
+        
+        ppl = PPL(self.generator_file, self.oracle_file)
+        # eval_samples = [self.generator.sample(self.sequence_length * self.batch_size, self.batch_size, label_i=i)
+        #                 for i in range(2)]
+        eval_samples=self.generator.sample(self.sequence_length, self.batch_size, label_i=1)
+        tokens = get_tokenlized(self.generator_file)
+        word_set = get_word_list(tokens)
+        word_index_dict, idx2word_dict = get_dict(word_set)
+        gen_tokens = tensor_to_tokens(eval_samples, idx2word_dict)
+        ppl.reset(gen_tokens)
+        self.add_metric(ppl)
 
-        print("Metrics Applied: " + nll.get_name() + ", " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name() + ", " + self.acc.get_name())
+        print("Metrics Applied: " + nll.get_name() + ", " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name() + ", " + self.acc.get_name() + ", " + ppl.get_name())
 
 
 
@@ -194,7 +206,16 @@ class Dcgan(Gan):
         self.acc = ACC()
         self.add_metric(self.acc)
         
-        print("Metrics Applied: " + cfg.get_name() + ", " + tei.get_name() + ", " + self.acc.get_name())
+        ppl = PPL(self.generator_file, self.test_file)
+        eval_samples=self.generator.sample(self.sequence_length, self.batch_size, label_i=1)
+        tokens = get_tokenlized(self.generator_file)
+        word_set = get_word_list(tokens)
+        word_index_dict, idx2word_dict = get_dict(word_set)
+        gen_tokens = tensor_to_tokens(eval_samples, idx2word_dict)
+        ppl.reset(gen_tokens)
+        self.add_metric(ppl)
+        
+        print("Metrics Applied: " + cfg.get_name() + ", " + tei.get_name() + ", " + self.acc.get_name() + ", " + ppl.get_name())
         
 
     def train_cfg(self):
@@ -310,7 +331,16 @@ class Dcgan(Gan):
         self.acc = ACC()
         self.add_metric(self.acc)
         
-        print("Metrics Applied: " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name() + ", " + self.acc.get_name())
+        ppl = PPL(self.generator_file, self.oracle_file)
+        eval_samples=self.generator.sample(self.sequence_length, self.batch_size, label_i=1)
+        tokens = get_tokenlized(self.generator_file)
+        word_set = get_word_list(tokens)
+        word_index_dict, idx2word_dict = get_dict(word_set)
+        gen_tokens = tensor_to_tokens(eval_samples, idx2word_dict)
+        ppl.reset(gen_tokens)
+        self.add_metric(ppl)
+        
+        print("Metrics Applied: " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name() + ", " + self.acc.get_name() + ", " + ppl.get_name())
         
 
 

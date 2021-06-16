@@ -8,6 +8,7 @@ from utils.metrics.Bleu import Bleu
 from utils.metrics.EmbSim import EmbSim
 from utils.metrics.Nll import Nll
 from utils.metrics.TEI import TEI
+from utils.metrics.PPL import PPL
 from utils.oracle.OracleLstm import OracleLstm
 from utils.utils import *
 
@@ -62,7 +63,10 @@ class Pgbleu(Gan):
         tei = TEI()
         self.add_metric(tei)
 
-        print("Metrics Applied: " + nll.get_name() + ", " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name())
+        ppl = PPL()
+        self.add_metric(ppl)
+
+        print("Metrics Applied: " + nll.get_name() + ", " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name() + ", " + ppl.get_name())
         
         
 

@@ -10,6 +10,7 @@ from utils.metrics.Cfg import Cfg
 from utils.metrics.EmbSim import EmbSim
 from utils.metrics.Nll import Nll
 from utils.metrics.TEI import TEI
+from utils.metrics.PPL import PPL
 from utils.oracle.OracleCfg import OracleCfg
 from utils.oracle.OracleLstm import OracleLstm
 from utils.text_process import *
@@ -72,7 +73,10 @@ class Gsgan(Gan):
         tei = TEI()
         self.add_metric(tei)
 
-        print("Metrics Applied: " + nll.get_name() + ", " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name())
+        ppl = PPL()
+        self.add_metric(ppl)
+
+        print("Metrics Applied: " + nll.get_name() + ", " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name() + ", " + ppl.get_name())
 
 
     def train_discriminator(self):
@@ -197,8 +201,11 @@ class Gsgan(Gan):
         
         tei = TEI()
         self.add_metric(tei)
+
+        ppl = PPL()
+        self.add_metric(ppl)
         
-        print("Metrics Applied: " + cfg.get_name() + ", " + tei.get_name())
+        print("Metrics Applied: " + cfg.get_name() + ", " + tei.get_name() + ", " + ppl.get_name())
         
 
     def train_cfg(self):

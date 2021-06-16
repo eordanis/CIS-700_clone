@@ -11,6 +11,7 @@ from utils.metrics.EmbSim import EmbSim
 from utils.metrics.Nll import Nll
 from utils.metrics.TEI import TEI
 from utils.metrics.clas_acc import ACC
+from utils.metrics.PPL import PPL
 from utils.oracle.OracleCfg import OracleCfg
 from utils.oracle.OracleLstm import OracleLstm
 from utils.text_process import *
@@ -35,24 +36,33 @@ class Infogan(Gan):
 
 
     def init_metric(self):     
-      nll = Nll(data_loader=self.oracle_data_loader, rnn=self.oracle, sess=self.sess)
-      self.add_metric(nll)
+        nll = Nll(data_loader=self.oracle_data_loader, rnn=self.oracle, sess=self.sess)
+        self.add_metric(nll)
 
-      inll = Nll(data_loader=self.gen_data_loader, rnn=self.generator, sess=self.sess)
-      inll.set_name('nll-test')
-      self.add_metric(inll)
+        inll = Nll(data_loader=self.gen_data_loader, rnn=self.generator, sess=self.sess)
+        inll.set_name('nll-test')
+        self.add_metric(inll)
 
-      from utils.metrics.DocEmbSim import DocEmbSim
-      docsim = DocEmbSim(oracle_file=self.oracle_file, generator_file=self.generator_file, num_vocabulary=self.vocab_size)
-      self.add_metric(docsim)
-    
-      tei = TEI()
-      self.add_metric(tei)
+        from utils.metrics.DocEmbSim import DocEmbSim
+        docsim = DocEmbSim(oracle_file=self.oracle_file, generator_file=self.generator_file, num_vocabulary=self.vocab_size)
+        self.add_metric(docsim)
 
-      self.acc = ACC()
-      self.add_metric(self.acc)
+        tei = TEI()
+        self.add_metric(tei)
 
-      print("Metrics Applied: " + nll.get_name() + ", " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name() + ", " + self.acc.get_name())
+        self.acc = ACC()
+        self.add_metric(self.acc)
+
+        ppl = PPL(self.generator_file, self.oracle_file)
+        eval_samples=self.generator.sample(self.sequence_length, self.batch_size, label_i=1)
+        tokens = get_tokenlized(self.generator_file)
+        word_set = get_word_list(tokens)
+        word_index_dict, idx2word_dict = get_dict(word_set)
+        gen_tokens = tensor_to_tokens(eval_samples, idx2word_dict)
+        ppl.reset(gen_tokens)
+        self.add_metric(ppl)
+
+        print("Metrics Applied: " + nll.get_name() + ", " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name() + ", " + self.acc.get_name() + ", " + ppl.get_name())
         
         
 
@@ -196,7 +206,16 @@ class Infogan(Gan):
         self.acc = ACC()
         self.add_metric(self.acc)
         
-        print("Metrics Applied: " + cfg.get_name() + ", " + tei.get_name()  + ", " + self.acc.get_name())
+        ppl = PPL(self.generator_file, self.test_file)
+        eval_samples=self.generator.sample(self.sequence_length, self.batch_size, label_i=1)
+        tokens = get_tokenlized(self.generator_file)
+        word_set = get_word_list(tokens)
+        word_index_dict, idx2word_dict = get_dict(word_set)
+        gen_tokens = tensor_to_tokens(eval_samples, idx2word_dict)
+        ppl.reset(gen_tokens)
+        self.add_metric(ppl)
+        
+        print("Metrics Applied: " + cfg.get_name() + ", " + tei.get_name()  + ", " + self.acc.get_name() + ", " + ppl.get_name())
         
 
     def train_cfg(self):
@@ -311,7 +330,16 @@ class Infogan(Gan):
         self.acc = ACC()
         self.add_metric(self.acc)
         
-        print("Metrics Applied: " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name()  + ", " + self.acc.get_name())
+        ppl = PPL(self.generator_file, self.oracle_file)
+        eval_samples=self.generator.sample(self.sequence_length, self.batch_size, label_i=1)
+        tokens = get_tokenlized(self.generator_file)
+        word_set = get_word_list(tokens)
+        word_index_dict, idx2word_dict = get_dict(word_set)
+        gen_tokens = tensor_to_tokens(eval_samples, idx2word_dict)
+        ppl.reset(gen_tokens)
+        self.add_metric(ppl)
+        
+        print("Metrics Applied: " + inll.get_name() + ", " + docsim.get_name() + ", " + tei.get_name()  + ", " + self.acc.get_name() + ", " + ppl.get_name())
 
 
     def train_real(self, data_loc=None):
