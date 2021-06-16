@@ -15,7 +15,7 @@ class Generator(object):
                  learning_rate=0.01, reward_gamma=0.95):
         self.num_vocabulary = num_vocabulary
         self.batch_size = batch_size
-        self.emb_dim = emb_dim
+        self.emb_dim = num_vocabulary
         self.hidden_dim = hidden_dim
         self.sequence_length = sequence_length
         self.start_token = tf.compat.v1.constant([start_token] * self.batch_size, dtype=tf.compat.v1.int32)
@@ -35,7 +35,7 @@ class Generator(object):
         self.hidden_dim2 = hidden_dim
         self.lstm = nn.LSTM(cfg.k_label + self.emb_dim, self.hidden_dim, batch_first=True)
         self.lstm2out = nn.Linear(self.hidden_dim, self.emb_dim)
-        self.temperature = nn.Parameter(torch.Tensor([1.0]), requires_grad=False)  # init value is 1.0
+        self.temperaturePpl = nn.Parameter(torch.Tensor([1.0]), requires_grad=False)  # init value is 1.0
 
 
         with tf.compat.v1.variable_scope('generator'):

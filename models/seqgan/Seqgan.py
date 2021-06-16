@@ -329,7 +329,7 @@ class Seqgan(Gan):
         self.acc = ACC()
         self.add_metric(self.acc)
         
-        ppl = PPL(self.generator_file, self.oracle_File)
+        ppl = PPL(self.generator_file, self.oracle_file)
         eval_samples=self.generator.sample(self.sequence_length, self.batch_size, label_i=1)
         tokens = get_tokenlized(self.generator_file)
         word_set = get_word_list(tokens)
