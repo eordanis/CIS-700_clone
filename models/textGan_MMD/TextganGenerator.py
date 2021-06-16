@@ -15,7 +15,7 @@ class Generator(object):
                  learning_rate=0.01, reward_gamma=0.95):
         self.num_vocabulary = num_vocabulary
         self.batch_size = batch_size
-        self.emb_dim = num_vocabulary
+        self.emb_dim = emb_dim
         self.hidden_dim = hidden_dim
         self.sequence_length = sequence_length
         self.start_token = tf.compat.v1.constant([start_token] * self.batch_size, dtype=tf.compat.v1.int32)

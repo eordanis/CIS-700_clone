@@ -76,7 +76,6 @@ class PPL(Metrics):
             subprocess.getstatusoutput(cd_command + " && " + command_2)  # call without logging output
             if os.path.exists(os.path.join(kenlm_path, "build", output_path + ".bin")):
                 break
-            # print(output_path)
 
         # create language model
         model = kenlm.Model(os.path.join(kenlm_path, "build", output_path + ".bin"))

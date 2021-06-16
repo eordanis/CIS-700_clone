@@ -190,6 +190,7 @@ def display_metrics(directory=None):
                     df.columns = df.columns.str.replace(r'^PLL_', '')
                 if df.columns.any('Nll-Oracle_'):
                     df.columns = df.columns.str.replace(r'^Nll-Oracle_', '')
+                print(df.columns)
                 df.plot(ax=axes[r, c], y=df.columns, kind='line',
                             title=df_title_list[count], figsize=(20, 10)).legend(loc='upper left')
                 count += 1
