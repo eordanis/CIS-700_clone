@@ -54,17 +54,7 @@ class PPL(Metrics):
                                      output_path=output_path, n_gram=self.n_gram)
         for_ppl = self.get_ppl(for_lm, self.gen_tokens)
 
-        # reverse ppl
-        try:
-            rev_lm = self.train_ngram_lm(kenlm_path=kenlm_path, data_path=save_path,
-                                         output_path=output_path, n_gram=self.n_gram)
-
-            rev_ppl = self.get_ppl(rev_lm, self.test_data.tokens)
-        except:
-            # Note: Only after the generator is trained few epochs, the reverse ppl can be calculated.
-            rev_ppl = 0
-
-        return [for_ppl, rev_ppl]
+        return for_ppl
 
     def train_ngram_lm(self, kenlm_path, data_path, output_path, n_gram):
         """
